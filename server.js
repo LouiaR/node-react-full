@@ -1,11 +1,12 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
+const morgan = require('morgan');
+const passport = require('passport');
 
 const users = require('./routes/api/users');
 const profile = require('./routes/api/profile');
 const posts = require('./routes/api/posts');
-const morgan = require('morgan');
 
 const app = express();
 
@@ -24,9 +25,10 @@ mongoose
   .then(() => console.log('MongoDB Connected'))
   .catch(err => console.log(err));
 
-app.get('/', (req, res) => {
-  res.send('Hello Bonjour');
-});
+app.use(passport.initialize());
+
+// passport config
+require('./config/passport')(passport);
 
 // user Routes
 app.use('/api/users', users);
